@@ -1,0 +1,10 @@
+name = "rieltor-leads"
+main = "index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
+
+# Секреты задаются командами (в файл их не записывать), по два на клиента:
+#   npx wrangler secret put BOT_TOKEN_IVAN
+#   npx wrangler secret put MANAGER_ID_IVAN
