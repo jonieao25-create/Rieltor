@@ -283,7 +283,6 @@ document.body.insertAdjacentHTML('afterbegin', `
     [].forEach.call(secTabsEl.children, function(b){
       var on = b.getAttribute('data-sec') === sectionId;
       b.classList.toggle('active', on);
-      if (on) secTabsEl.scrollLeft = b.offsetLeft - 16;   // активная вкладка всегда видна
     });
 
     // заголовок раздела: из раздела, а если там пусто — из общих настроек
