@@ -11,6 +11,7 @@
   --accent:#0E6E64;
   --accent-ink:#F3F1EC;
   --accent-soft:#DCEAE6;
+  --brand2:#463936;
   --badge-econom:#6B6F76;
   --badge-econom-soft:#E6E5E1;
   --danger:#B3482F;
@@ -295,7 +296,7 @@ body::before{
 }
 .cta-inner{max-width:480px; margin:0 auto}
 .cta-btn{
-  width:100%; padding:14px; border:none; border-radius:14px; background:var(--accent); color:var(--accent-ink);
+  width:100%; padding:14px; border:none; border-radius:14px; background:var(--cta, var(--accent)); color:var(--cta-ink, var(--accent-ink));
   font-size:15px; font-weight:700; cursor:pointer; font-family:'Manrope',sans-serif;
 }
 .cta-btn:active{opacity:.85}
@@ -336,7 +337,7 @@ body::before{
 .modal-actions{display:flex; gap:10px; margin-top:4px}
 .modal-actions button{flex:1; padding:12px; border-radius:11px; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit; border:1px solid var(--border)}
 .btn-ghost{background:transparent; color:var(--fg)}
-.btn-primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+.btn-primary{background:var(--cta, var(--accent)); color:var(--cta-ink, var(--accent-ink)); border-color:var(--cta, var(--accent))}
 .ok-state{display:flex; flex-direction:column; align-items:center; gap:10px; padding:10px 0; text-align:center}
 .ok-state svg{color:var(--accent)}
 
@@ -365,14 +366,14 @@ body::before{
 /* иконка слева, текст справа, в одну строку */
 .v-perk{background:#fff; border-radius:12px; padding:9px 10px 9px 8px; display:flex; align-items:center; gap:6px; min-width:0; min-height:54px}
 .v-perk.wide{grid-column:1/-1}
-.v-perk .ic{flex:none; width:28px; height:28px; border-radius:7px; background:#463936; color:#fff; display:grid; place-items:center}
-.v-perk .tx{flex:1; min-width:0; color:#463936; font:800 9.5px/1.3 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; letter-spacing:-.01em}
+.v-perk .ic{flex:none; width:28px; height:28px; border-radius:7px; background:var(--brand2); color:#fff; display:grid; place-items:center}
+.v-perk .tx{flex:1; min-width:0; color:var(--brand2); font:800 9.5px/1.3 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; letter-spacing:-.01em}
 .v-tagline{background:var(--bg-elevated); border-radius:16px; padding:18px 14px; text-align:center; font-family:'Unbounded', 'Arial Black', sans-serif; font-weight:800; text-transform:uppercase; line-height:1.15}
 .v-tagline span{display:table; margin:0 auto; white-space:nowrap}
 .v-houses{display:flex; flex-direction:column; gap:22px; padding-top:6px}
 .v-house{display:flex; flex-direction:column; gap:10px}
 .v-house-photo{aspect-ratio:3/2; border-radius:14px; background:var(--accent-soft) center/cover no-repeat}
-.v-house-photo.brandbox{background:#463936; display:grid; place-items:center; color:#fff}
+.v-house-photo.brandbox{background:var(--brand2); display:grid; place-items:center; color:#fff}
 .brandbox .logo{font:800 30px/1 'Unbounded', 'Arial Black', sans-serif; letter-spacing:.06em; text-transform:uppercase}
 .brandbox .logo small{display:block; text-align:right; font-size:13px; font-weight:600; letter-spacing:.04em; margin-top:6px; border-top:1px solid rgba(255,255,255,.7); padding-top:4px; text-transform:none}
 .v-house h3{margin:4px 0 0; font:800 20px/1.15 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase}
@@ -382,7 +383,7 @@ body::before{
 .v-house .note{align-self:flex-start; background:var(--accent-soft); border-radius:8px; padding:6px 10px; font-size:14px; font-weight:700}
 /* кнопки домов под крупной фразой посёлка */
 .v-hbtns{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px}
-.v-hbtn{border:0; border-radius:12px; background:#fff; color:#463936; min-height:52px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:6px; font:800 12px/1.25 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; text-align:left; cursor:pointer}
+.v-hbtn{border:0; border-radius:12px; background:#fff; color:var(--brand2); min-height:52px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:6px; font:800 12px/1.25 'Unbounded', 'Arial Black', sans-serif; text-transform:uppercase; text-align:left; cursor:pointer}
 .v-hbtn::after{content:'→'; flex:none; font-size:15px; color:var(--accent)}
 .v-hbtn.wide{grid-column:1/-1}
 .v-hbtn small{display:block; margin-top:4px; font:700 13px 'Manrope', -apple-system, sans-serif; text-transform:none; color:var(--fg-muted)}
@@ -416,7 +417,7 @@ body::before{
 .v-plan-zoom{position:fixed; inset:0; z-index:60; background:rgba(0,0,0,.85); display:flex; align-items:center; justify-content:center; padding:16px}
 .v-plan-zoom[hidden]{display:none}
 .v-plan-zoom img{max-width:100%; max-height:100%; background:#fff; border-radius:12px; padding:8px}
-.v-btn{align-self:flex-start; border:0; border-radius:8px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:15px; font-weight:700; padding:13px 20px; cursor:pointer}
+.v-btn{align-self:flex-start; border:0; border-radius:8px; background:var(--cta, var(--accent)); color:var(--cta-ink, var(--accent-ink)); font:inherit; font-size:15px; font-weight:700; padding:13px 20px; cursor:pointer}
 .v-btn.center{align-self:center}
 .v-lead{margin:18px 0 0; text-align:center; font-weight:700; font-size:19px}
 .v-conds{display:grid; grid-template-columns:1fr 1fr; gap:10px}
@@ -428,3 +429,12 @@ body::before{
 .v-cond.wide{grid-column:1/-1}
 @media (max-width:360px){ .v-conds{grid-template-columns:1fr} }
 footer.app-foot{padding:26px 0 30px; text-align:center; font-size:11.5px; color:var(--fg-muted)}
+
+/* карточка риелтора на главной (settings.agent в data.js) */
+.agent{display:flex; align-items:center; gap:12px; margin:14px 0 16px; padding:12px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px}
+.agent[hidden]{display:none}
+.agent img{flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover}
+.agent .who{flex:1; min-width:0}
+.agent .nm{font-weight:800; font-size:15px}
+.agent .rl{color:var(--fg-muted); font-size:12.5px; margin-top:2px}
+.agent button{flex:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:700; cursor:pointer; background:var(--accent); color:var(--accent-ink)}

@@ -11,6 +11,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   <section id="view-home">
     <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
+      <div class="agent" id="agent" hidden></div>
       <div class="eyebrow"></div>
       <h1></h1>
       <div class="points" id="points" hidden></div>
@@ -490,11 +491,11 @@ document.body.insertAdjacentHTML('afterbegin', `
   var PERK_ICONS = {
     gas:'<path d="M12 3c1 3 5 5 5 10a5 5 0 01-10 0c0-2 1-3.5 2-4.5.3 2 1.3 3 2.5 3.5C11 9 11 6 12 3z" fill="currentColor"/>',
     water:'<path d="M12 3s6 7 6 11a6 6 0 01-12 0c0-4 6-11 6-11z" fill="currentColor"/>',
-    drain:'<path d="M4 6h8a5 5 0 015 5v8h-5v-8H4z" fill="currentColor"/><rect x="11" y="15" width="7" height="2" fill="#463936"/>',
+    drain:'<path d="M4 6h8a5 5 0 015 5v8h-5v-8H4z" fill="currentColor"/><rect x="11" y="15" width="7" height="2" style="fill:var(--brand2)"/>',
     clean:'<rect x="3" y="9" width="18" height="6" rx="1" fill="currentColor"/><rect x="2" y="7" width="3" height="10" rx="1" fill="currentColor"/><rect x="19" y="7" width="3" height="10" rx="1" fill="currentColor"/>',
-    road:'<path d="M9 3h6l5 18H4z" fill="currentColor"/><path d="M12 6v3M12 11v3M12 16v3" stroke="#463936" stroke-width="1.6"/>',
-    bus:'<rect x="5" y="3" width="14" height="15" rx="3" fill="currentColor"/><rect x="7" y="6" width="10" height="5" rx="1" fill="#463936"/><circle cx="8.5" cy="14.5" r="1.3" fill="#463936"/><circle cx="15.5" cy="14.5" r="1.3" fill="#463936"/><rect x="6.5" y="18" width="3" height="3" rx="1" fill="currentColor"/><rect x="14.5" y="18" width="3" height="3" rx="1" fill="currentColor"/>',
-    city:'<rect x="5" y="3" width="9" height="18" fill="currentColor"/><rect x="14" y="9" width="5" height="12" fill="currentColor"/><path d="M7.5 7h4M7.5 10h4M7.5 13h4M7.5 16h4" stroke="#463936" stroke-width="1.4"/>',
+    road:'<path d="M9 3h6l5 18H4z" fill="currentColor"/><path d="M12 6v3M12 11v3M12 16v3" style="stroke:var(--brand2)" stroke-width="1.6"/>',
+    bus:'<rect x="5" y="3" width="14" height="15" rx="3" fill="currentColor"/><rect x="7" y="6" width="10" height="5" rx="1" style="fill:var(--brand2)"/><circle cx="8.5" cy="14.5" r="1.3" style="fill:var(--brand2)"/><circle cx="15.5" cy="14.5" r="1.3" style="fill:var(--brand2)"/><rect x="6.5" y="18" width="3" height="3" rx="1" fill="currentColor"/><rect x="14.5" y="18" width="3" height="3" rx="1" fill="currentColor"/>',
+    city:'<rect x="5" y="3" width="9" height="18" fill="currentColor"/><rect x="14" y="9" width="5" height="12" fill="currentColor"/><path d="M7.5 7h4M7.5 10h4M7.5 13h4M7.5 16h4" style="stroke:var(--brand2)" stroke-width="1.4"/>',
     bio:'<path d="M5 19C5 10 10 5 20 4c-1 10-6 15-15 15z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 19c4-5 7-8 11-11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
     net:'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.5 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.5-3.5-8.5s1-6 3.5-8.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
     tv:'<path d="M5 9a8 8 0 008 8L5 9z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 13l4-4M15 3a6 6 0 016 6M15 6a3 3 0 013 3M8 17l-2 4h7l-2-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -1009,8 +1010,30 @@ document.body.insertAdjacentHTML('afterbegin', `
       root.style.setProperty('--accent', SETTINGS.accentDark);
       root.style.setProperty('--accent-soft', SETTINGS.accentDark + '22');
     }
+    // Своя палитра клиента (settings.theme). light:true — всегда светлая
+    // тема, даже если в Telegram включена тёмная.
+    var T = SETTINGS.theme;
+    if (T){
+      if (T.light) root.setAttribute('data-theme', 'light');
+      var vars = { bg:'--bg', card:'--bg-elevated', text:'--fg', muted:'--fg-muted', border:'--border',
+        accent:'--accent', accentInk:'--accent-ink', soft:'--accent-soft', cta:'--cta', ctaInk:'--cta-ink', brand2:'--brand2' };
+      for (var k in vars) if (T[k]) root.style.setProperty(vars[k], T[k]);
+    }
     var cta = document.getElementById('ctaBtn');
     if (SETTINGS.ctaText && cta) cta.textContent = SETTINGS.ctaText;
+
+    // Карточка риелтора на главной: фото, имя, кнопка «Написать»
+    var A = SETTINGS.agent, agentEl = document.getElementById('agent');
+    if (A && agentEl){
+      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">' : '')
+        + '<div class="who"><div class="nm">' + esc(A.name || '') + '</div>'
+        + (A.role ? '<div class="rl">' + esc(A.role) + '</div>' : '') + '</div>'
+        + '<button type="button">' + esc(A.button || 'Написать') + '</button>';
+      agentEl.querySelector('button').addEventListener('click', function(){
+        openManagerChat('Здравствуйте! Хочу подобрать недвижимость.');
+      });
+      agentEl.hidden = false;
+    }
   })();
 
   // ---------- Telegram Mini App integration ----------
@@ -1018,8 +1041,8 @@ document.body.insertAdjacentHTML('afterbegin', `
     TG.ready();
     TG.expand();                                   // открыть на всю высоту экрана
     if (TG.disableVerticalSwipes) { try { TG.disableVerticalSwipes(); } catch(e){} }
-    if (TG.setHeaderColor)     { try { TG.setHeaderColor(SETTINGS.accent || '#0E6E64'); } catch(e){} }
-    if (TG.setBackgroundColor) { try { TG.setBackgroundColor('#F3F1EC'); } catch(e){} }
+    if (TG.setHeaderColor)     { try { TG.setHeaderColor((SETTINGS.theme && SETTINGS.theme.accent) || SETTINGS.accent || '#0E6E64'); } catch(e){} }
+    if (TG.setBackgroundColor) { try { TG.setBackgroundColor((SETTINGS.theme && SETTINGS.theme.bg) || '#F3F1EC'); } catch(e){} }
 
     if (TG.BackButton){
       TG.BackButton.onClick(goBack);
