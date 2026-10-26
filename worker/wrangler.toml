@@ -1,10 +1,15 @@
-name = "rieltor-leads"
+# Образец настроек. Евгений создаёт Worker через сайт Cloudflare,
+# а эти значения вписывает в Settings → Variables and Secrets.
+name = "leads-ID_КЛИЕНТА"
 main = "index.js"
 compatibility_date = "2026-10-01"
 
 [vars]
 ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
+APP_URL = "https://jonieao25-create.github.io/Rieltor/clients/ID_КЛИЕНТА/"
+MANAGER = "НИК_РИЕЛТОРА"
 
-# Секреты задаются командами (в файл их не записывать), по два на клиента:
-#   npx wrangler secret put BOT_TOKEN_IVAN
-#   npx wrangler secret put MANAGER_ID_IVAN
+# Секреты (в файл их не записывать, вводятся только в Cloudflare):
+#   BOT_TOKEN       — токен бота клиента от @BotFather
+#   MANAGER_ID      — номер чата риелтора (бот покажет его по команде /myid)
+#   WEBHOOK_SECRET  — придуманный пароль для подключения бота
