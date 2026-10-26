@@ -896,12 +896,21 @@ document.body.insertAdjacentHTML('afterbegin', `
     t += '.';
     if (name)  t += '\nМеня зовут ' + name + '.';
     if (phone) t += '\nТелефон: ' + phone;
+    t += '\nСогласен на обработку персональных данных.';
     return t;
   }
 
   function openManagerChat(text){
     var url = 'https://t.me/' + MANAGER + '?text=' + encodeURIComponent(text);
     if (TG && TG.openTelegramLink) TG.openTelegramLink(url);
+    else window.open(url, '_blank');
+  }
+
+  // политика конфиденциальности — privacy.html в папке клиента рядом с data.js;
+  // Telegram открывает её поверх приложения, введённые данные в форме не пропадают
+  function openPolicy(){
+    var url = new URL('privacy.html', location.href).href;
+    if (TG && TG.openLink) TG.openLink(url);
     else window.open(url, '_blank');
   }
 
@@ -918,9 +927,12 @@ document.body.insertAdjacentHTML('afterbegin', `
       + '<div class="field"><label for="leadPhone">Телефон</label>'
         + '<div class="phone-wrap"><span class="phone-prefix">+7</span>'
         + '<input id="leadPhone" type="tel" inputmode="numeric" maxlength="15" placeholder="924 123-45-67" autocomplete="tel"></div></div>'
+      // без галочки заявку отправить нельзя: так требует закон о персональных данных
+      + '<label class="consent"><input id="leadConsent" type="checkbox">'
+        + '<span>Согласен на обработку персональных данных и принимаю <a href="#" id="leadPolicy">политику конфиденциальности</a></span></label>'
       + '<div class="modal-actions">'
         + '<button class="btn-ghost" id="leadCancel" type="button">Отмена</button>'
-        + '<button class="btn-primary" id="leadSubmit" type="button">Написать риелтору</button>'
+        + '<button class="btn-primary" id="leadSubmit" type="button" disabled>Написать риелтору</button>'
       + '</div>';
     backdrop.hidden = false;
 
@@ -936,7 +948,17 @@ document.body.insertAdjacentHTML('afterbegin', `
     });
 
     document.getElementById('leadCancel').addEventListener('click', closeModal);
+    var consentEl = document.getElementById('leadConsent');
+    consentEl.addEventListener('change', function(){
+      document.getElementById('leadSubmit').disabled = !consentEl.checked;
+    });
+    document.getElementById('leadPolicy').addEventListener('click', function(e){
+      e.preventDefault();
+      openPolicy();
+    });
+
     document.getElementById('leadSubmit').addEventListener('click', function(){
+      if (!consentEl.checked) return;
       var name  = document.getElementById('leadName').value.trim();
       var digits = document.getElementById('leadPhone').value.replace(/\D/g, '');
       var phone = digits ? '+7 ' + document.getElementById('leadPhone').value.trim() : '';
@@ -957,7 +979,7 @@ document.body.insertAdjacentHTML('afterbegin', `
       fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData: initData, complex: c.name, room: c.room || '', name: name, phone: phone })
+        body: JSON.stringify({ initData: initData, complex: c.name, room: c.room || '', name: name, phone: phone, consent: true })
       }).then(function(r){
         if (!r.ok) throw new Error('http ' + r.status);
         showSent(c);

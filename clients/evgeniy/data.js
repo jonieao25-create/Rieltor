@@ -51,7 +51,16 @@ var SITE_DATA = {
 
     // Адрес сервиса заявок этого клиента (Cloudflare Worker).
     // Пока строка пустая, заявка уходит через чат с риелтором.
-    leadEndpoint: 'https://newbuilds-leads.joni-eao25.workers.dev'
+    leadEndpoint: 'https://newbuilds-leads.joni-eao25.workers.dev',
+
+    // Кто получает заявки — показывается в политике конфиденциальности
+    // (privacy.html в этой же папке). ФИО полностью, как в паспорте.
+    privacy: {
+      operator: 'Жаткин Евгений Сергеевич',
+      city: 'Калининград',
+      contact: '@Evgeniy_Rieltor_KLD',
+      date: '27 октября 2026'
+    }
   },
 
   // ---------------------------------------------------------------------
