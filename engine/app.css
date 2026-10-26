@@ -336,10 +336,16 @@ body::before{
 }
 .phone-wrap input:focus{outline:none}
 
+/* галочка согласия на обработку персональных данных (152-ФЗ) */
+.consent{display:flex; align-items:flex-start; gap:10px; font-size:12.5px; line-height:1.4; color:var(--fg-muted); cursor:pointer}
+.consent input{flex:none; width:20px; height:20px; margin:0; accent-color:var(--accent); cursor:pointer}
+.consent a{color:var(--accent); text-decoration:underline}
+
 .modal-actions{display:flex; gap:10px; margin-top:4px}
 .modal-actions button{flex:1; padding:12px; border-radius:11px; font-weight:700; font-size:14px; cursor:pointer; font-family:inherit; border:1px solid var(--border)}
 .btn-ghost{background:transparent; color:var(--fg)}
 .btn-primary{background:var(--cta, var(--accent)); color:var(--cta-ink, var(--accent-ink)); border-color:var(--cta, var(--accent))}
+.btn-primary:disabled{opacity:.45; cursor:default}
 .ok-state{display:flex; flex-direction:column; align-items:center; gap:10px; padding:10px 0; text-align:center}
 .ok-state svg{color:var(--accent)}
 
