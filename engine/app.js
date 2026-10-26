@@ -131,6 +131,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     <h2 class="v-green" id="vCondTitle"></h2>
     <div class="v-conds" id="vConds"></div>
     <button class="v-btn center" type="button" id="vConsult"></button>
+    <div class="cta-space"></div>
   </section>
 
   <!-- ===== HOUSE (страница одного дома в посёлке) ===== -->
@@ -172,7 +173,7 @@ document.body.insertAdjacentHTML('afterbegin', `
       <h3 class="h-sub">Как построен дом</h3>
       <div id="hSpecs" style="display:flex; flex-direction:column; gap:8px"></div>
     </div>
-    <button class="v-btn center" type="button" id="hLead">Оставить заявку на этот дом →</button>
+    <div class="cta-space"></div>
   </section>
 
   <footer class="app-foot" id="appFoot"></footer>
@@ -357,6 +358,8 @@ document.body.insertAdjacentHTML('afterbegin', `
   var viewHome = document.getElementById('view-home');
   var viewDetail = document.getElementById('view-detail');
   var ctaBar = document.getElementById('ctaBar');
+  // на кого заявка с закреплённой кнопки внизу: null — текущий ЖК, иначе посёлок или дом
+  var ctaTarget = null, villageTarget = null;
   var activeTab = {};
 
   // ---------- hero photo carousel ----------
@@ -476,6 +479,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     }).join('');
 
     ctaBar.dataset.zhk = c.id;
+    ctaTarget = null;
     ctaBar.hidden = false;
     viewHome.hidden = true;
     viewDetail.hidden = false;
@@ -670,7 +674,8 @@ document.body.insertAdjacentHTML('afterbegin', `
       if (TG.BackButton) TG.BackButton.show();
       if (TG.HapticFeedback) { try { TG.HapticFeedback.impactOccurred('light'); } catch(e){} }
     }
-    ctaBar.hidden = true;
+    villageTarget = ctaTarget = { name: 'посёлок ' + short, room: '' };
+    ctaBar.hidden = false;
     viewHome.hidden = true;
     viewDetail.hidden = true;
     viewHouse.hidden = true;
@@ -750,7 +755,7 @@ document.body.insertAdjacentHTML('afterbegin', `
         + s.items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></details>';
     }).join('');
 
-    document.getElementById('hLead').onclick = function(){ openLeadForm({ name: 'посёлок ' + short + ', ' + full.charAt(0).toLowerCase() + full.slice(1), room: '' }); };
+    ctaTarget = { name: 'посёлок ' + short + ', ' + full.charAt(0).toLowerCase() + full.slice(1), room: '' };
 
     viewVillage.hidden = true;
     viewHouse.hidden = false;
@@ -760,6 +765,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   function backToVillage(){
     viewHouse.hidden = true;
     viewVillage.hidden = false;
+    ctaTarget = villageTarget;
     window.scrollTo(0, villageScroll);
   }
   // кнопка «Назад» Telegram: со страницы дома — в посёлок, иначе — на главную
@@ -1015,7 +1021,7 @@ document.body.insertAdjacentHTML('afterbegin', `
   function closeModal(){ backdrop.hidden = true; }
   backdrop.addEventListener('click', function(e){ if (e.target === backdrop) closeModal(); });
 
-  document.getElementById('ctaBtn').addEventListener('click', function(){ openLeadForm(); });
+  document.getElementById('ctaBtn').addEventListener('click', function(){ openLeadForm(ctaTarget || undefined); });
 
 
   // ---------- применяем настройки из data.js ----------
