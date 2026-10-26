@@ -558,7 +558,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     function lead(what){ return { name: 'посёлок ' + short + ', ' + what, room: '' }; }
 
     document.getElementById('vTitle').textContent = c.name;
-    document.getElementById('vSub').textContent = c.clsLabel || '';
+    document.getElementById('vSub').textContent = 'Коттеджный посёлок';
     document.getElementById('vLogo').innerHTML = c.hideLogo ? '' : c.logoImg ? '<img src="' + c.logoImg + '" alt="' + esc(c.logo || c.name) + '"' + (c.logoWidth ? ' style="max-width:' + c.logoWidth + 'px"' : '') + '>' : '<b>' + esc(c.logo || c.name) + '</b>' + (c.logoSub ? '<small>' + esc(c.logoSub) + '</small>' : '');
     document.getElementById('vAddr').textContent = c.addr || '';
 
