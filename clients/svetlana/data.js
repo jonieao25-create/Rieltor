@@ -75,7 +75,7 @@ var SITE_DATA = {
 
     // Адрес сервиса заявок этого клиента (Cloudflare Worker).
     // Пока строка пустая, заявка уходит через чат с риелтором.
-    leadEndpoint: ''
+    leadEndpoint: 'https://leads-svetlana.joni-eao25.workers.dev'
   },
 
   // ---------------------------------------------------------------------
