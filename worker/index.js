@@ -1,12 +1,20 @@
-// Cloudflare Worker: один сервис заявок на всех клиентов. Принимает заявку
-// из мини-приложения и пересылает её риелтору сообщением от его бота.
-// Секреты хранятся в настройках Worker, в репозитории их нет. На каждого
-// клиента два секрета, id клиента — из его data.js (clientId), заглавными:
-//   BOT_TOKEN_<ID>   — токен бота клиента от @BotFather
-//   MANAGER_ID_<ID>  — числовой id чата риелтора (куда присылать заявки)
-// Например, для clientId 'ivan': BOT_TOKEN_IVAN и MANAGER_ID_IVAN.
-// Старые BOT_TOKEN и MANAGER_ID без суффикса работают для заявок без clientId.
+// Cloudflare Worker: принимает заявку из мини-приложения и пересылает её
+// риелтору сообщением от бота. Для каждого клиента — свой Worker с этим
+// же кодом и своими секретами (имя, например, leads-ivan). Секреты (токен бота, chat id) хранятся
+// в настройках Worker, в репозитории их нет:
+//   BOT_TOKEN   — токен бота от @BotFather
+//   MANAGER_ID  — числовой id чата риелтора (куда присылать заявки)
 //   ALLOWED_ORIGIN — адрес сайта, например https://jonieao25-create.github.io
+//
+// Второе дело Worker — отвечать боту (адрес /tg). На /start бот присылает
+// кнопки под полем ввода, каждая открывает свой раздел мини-приложения.
+//   WEBHOOK_SECRET — придуманный вами пароль (латиница и цифры), по нему
+//                    Worker узнаёт, что сообщение пришло именно от Telegram
+//   APP_URL        — адрес мини-приложения
+//   MANAGER        — ник риелтора в Telegram без @ (для кнопки «Связаться»)
+//
+// Как узнать MANAGER_ID риелтора: он открывает бота, нажимает «Запустить»
+// и отправляет команду /myid. Бот отвечает числом — его и вписываем.
 
 const MAX_AGE_SEC = 24 * 60 * 60;
 
@@ -47,18 +55,6 @@ const esc = (s) =>
 
 const clip = (s, n) => String(s == null ? '' : s).trim().slice(0, n);
 
-// Бот и чат клиента по его clientId
-function clientSecrets(env, clientId) {
-  if (clientId) {
-    if (!/^[a-z0-9_]{1,40}$/.test(clientId)) return null;
-    const key = clientId.toUpperCase();
-    const token = env[`BOT_TOKEN_${key}`];
-    const chat = env[`MANAGER_ID_${key}`];
-    return token && chat ? { token, chat } : null;
-  }
-  return env.BOT_TOKEN && env.MANAGER_ID ? { token: env.BOT_TOKEN, chat: env.MANAGER_ID } : null;
-}
-
 function cors(env) {
   return {
     'Access-Control-Allow-Origin': env.ALLOWED_ORIGIN,
@@ -75,8 +71,99 @@ function reply(env, status, body) {
   });
 }
 
+// ---------- бот: кнопки под полем ввода ----------
+
+function tgApi(env, method, body) {
+  return fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+}
+
+const CONTACT_BTN = '📞 Связаться';
+
+// Клавиатура 2×2. Кнопка с web_app открывает мини-приложение
+// сразу на нужном разделе (?section=... — id раздела из data.js).
+function mainKeyboard(env) {
+  const app = (section) => ({ web_app: { url: `${env.APP_URL}?section=${section}` } });
+  return {
+    keyboard: [
+      [{ text: '🏢 Новостройки', ...app('newbuilds') }, { text: '🏡 Коттеджные посёлки', ...app('cottages') }],
+      [{ text: '🌊 ЖК на Побережье', ...app('coast') }, { text: CONTACT_BTN }],
+    ],
+    resize_keyboard: true,
+    is_persistent: true,
+  };
+}
+
+async function handleBotUpdate(update, env) {
+  const msg = update.message;
+  if (!msg || !msg.chat) return;
+  const text = msg.text || '';
+
+  // /myid — бот присылает номер чата. Нужен один раз, чтобы вписать
+  // номер риелтора в секрет MANAGER_ID. Свой номер видит только сам человек.
+  if (text.trim() === '/myid') {
+    await tgApi(env, 'sendMessage', {
+      chat_id: msg.chat.id,
+      text: `Ваш ID: ${msg.chat.id}\nПерешлите это число тому, кто настраивает бота.`,
+      reply_markup: mainKeyboard(env),
+    });
+    return;
+  }
+
+  if (text === CONTACT_BTN) {
+    await tgApi(env, 'sendMessage', {
+      chat_id: msg.chat.id,
+      text: `Напишите мне в Telegram: @${env.MANAGER}\nОтвечу и подберу варианты.`,
+      reply_markup: mainKeyboard(env),
+    });
+    return;
+  }
+
+  // /start и любое другое сообщение — приветствие с кнопками
+  await tgApi(env, 'sendMessage', {
+    chat_id: msg.chat.id,
+    text: 'Здравствуйте! Выберите, что вас интересует, кнопкой ниже 👇',
+    reply_markup: mainKeyboard(env),
+  });
+}
+
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+
+    // Сообщения от Telegram для бота
+    if (url.pathname === '/tg') {
+      if (request.method !== 'POST' ||
+          request.headers.get('X-Telegram-Bot-Api-Secret-Token') !== env.WEBHOOK_SECRET) {
+        return new Response('forbidden', { status: 403 });
+      }
+      try {
+        await handleBotUpdate(await request.json(), env);
+      } catch (e) {
+        // отвечаем 200 в любом случае, иначе Telegram будет слать то же сообщение снова
+      }
+      return new Response('ok');
+    }
+
+    // Один раз подключить бота к Worker: открыть в браузере
+    //   https://<адрес worker>/setup?key=<WEBHOOK_SECRET>
+    if (url.pathname === '/setup') {
+      if (!env.WEBHOOK_SECRET || url.searchParams.get('key') !== env.WEBHOOK_SECRET) {
+        return new Response('wrong key', { status: 403 });
+      }
+      const r = await tgApi(env, 'setWebhook', {
+        url: `${url.origin}/tg`,
+        secret_token: env.WEBHOOK_SECRET,
+        allowed_updates: ['message'],
+      });
+      return new Response(await r.text(), {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: cors(env) });
     }
@@ -92,10 +179,7 @@ export default {
       return reply(env, 400, { ok: false });
     }
 
-    const secrets = clientSecrets(env, clip(data.clientId, 40));
-    if (!secrets) return reply(env, 404, { ok: false });
-
-    const user = await verifyInitData(String(data.initData || ''), secrets.token);
+    const user = await verifyInitData(String(data.initData || ''), env.BOT_TOKEN);
     if (!user) return reply(env, 401, { ok: false });
 
     const complex = clip(data.complex, 80);
@@ -119,11 +203,11 @@ export default {
       .filter(Boolean)
       .join('\n');
 
-    const tg = await fetch(`https://api.telegram.org/bot${secrets.token}/sendMessage`, {
+    const tg = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: secrets.chat,
+        chat_id: env.MANAGER_ID,
         text,
         parse_mode: 'HTML',
         disable_web_page_preview: true,
