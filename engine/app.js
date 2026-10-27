@@ -1049,10 +1049,12 @@ document.body.insertAdjacentHTML('afterbegin', `
     var cta = document.getElementById('ctaBtn');
     if (SETTINGS.ctaText && cta) cta.textContent = SETTINGS.ctaText;
 
-    // Карточка риелтора на главной: фото, имя, кнопка «Написать»
+    // Карточка риелтора на главной: фото, имя, кнопка «Написать».
+    // Нет фото — в кружке первая буква имени.
     var A = SETTINGS.agent, agentEl = document.getElementById('agent');
     if (A && agentEl){
-      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">' : '')
+      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">'
+          : '<div class="ini">' + esc((A.name || '?').charAt(0)) + '</div>')
         + '<div class="who"><div class="nm">' + esc(A.name || '') + '</div>'
         + (A.role ? '<div class="rl">' + esc(A.role) + '</div>' : '') + '</div>'
         + '<button type="button">' + esc(A.button || 'Написать') + '</button>';
