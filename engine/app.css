@@ -133,6 +133,14 @@ body::before{
 .pt-dots{display:flex; gap:5px; justify-content:center}
 .pt-dots u{width:6px; height:6px; border-radius:3px; background:#8a7d70; transition:width .2s}
 .pt-dots u.on{width:16px; background:#D6B779}
+.pt-nav{display:flex; align-items:center; justify-content:center; gap:14px}
+.pt-arr{
+  width:34px; height:34px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+  border:2px solid transparent; color:#7a5a12; font:700 22px/1 sans-serif; padding:0 0 3px;
+  background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+  box-shadow:0 2px 8px rgba(184,134,11,.25);
+}
+.pt-arr:disabled{opacity:.35; cursor:default}
 
 .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
