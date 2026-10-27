@@ -1084,6 +1084,9 @@ document.body.insertAdjacentHTML('afterbegin', `
     }
     // Блок «Наши услуги» под карточкой риелтора. Нажатие — окно услуги,
     // из него форма заявки с названием услуги.
+    // золотая рамка у плашек-преимуществ (settings.goldPoints в data.js)
+    if (SETTINGS.goldPoints) document.getElementById('points').classList.add('gold');
+
     var S = SETTINGS.services, svcEl = document.getElementById('services');
     if (S && S.items && S.items.length && svcEl){
       svcEl.innerHTML = (S.title ? '<div class="svc-h">' + esc(S.title) + '</div>' : '')
