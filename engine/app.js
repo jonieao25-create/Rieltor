@@ -12,6 +12,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
       <div class="agent" id="agent" hidden></div>
+      <div class="svc" id="services" hidden></div>
       <div class="eyebrow"></div>
       <h1></h1>
       <div class="points" id="points" hidden></div>
@@ -920,6 +921,24 @@ document.body.insertAdjacentHTML('afterbegin', `
     else window.open(url, '_blank');
   }
 
+  // окно услуги: описание, пункты, цена и кнопка заявки
+  function openService(it){
+    modalBody.innerHTML = '<div class="svc-sheet">'
+      + '<h3>' + esc((it.icon ? it.icon + ' ' : '') + (it.title || '')) + '</h3>'
+      + (it.text ? '<p>' + esc(it.text) + '</p>' : '')
+      + ((it.list && it.list.length) ? '<ul>' + it.list.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '')
+      + (it.price ? '<div class="price">' + esc(it.price) + '</div>' : '')
+      + '<div class="modal-actions">'
+        + '<button class="btn-ghost" id="svcClose" type="button">Закрыть</button>'
+        + '<button class="btn-primary" id="svcLead" type="button">' + esc(it.button || 'Оставить заявку') + '</button>'
+      + '</div></div>';
+    backdrop.hidden = false;
+    document.getElementById('svcClose').addEventListener('click', closeModal);
+    document.getElementById('svcLead').addEventListener('click', function(){
+      openLeadForm({ name: it.lead || ('услугу «' + (it.title || '') + '»'), room: '' });
+    });
+  }
+
   function openLeadForm(target){
     if (!target){
       var zhk = byId[ctaBar.dataset.zhk];
@@ -1062,6 +1081,29 @@ document.body.insertAdjacentHTML('afterbegin', `
         openManagerChat('Здравствуйте! Хочу подобрать недвижимость.');
       });
       agentEl.hidden = false;
+    }
+    // Блок «Наши услуги» под карточкой риелтора. Нажатие — окно услуги,
+    // из него форма заявки с названием услуги.
+    // золотая рамка у плашек-преимуществ (settings.goldPoints в data.js)
+    if (SETTINGS.goldPoints) document.getElementById('points').classList.add('gold');
+
+    var S = SETTINGS.services, svcEl = document.getElementById('services');
+    if (S && S.items && S.items.length && svcEl){
+      svcEl.innerHTML = (S.title ? '<div class="svc-h">' + esc(S.title) + '</div>' : '')
+        + '<div class="svc-list"></div>';
+      var svcList = svcEl.querySelector('.svc-list');
+      S.items.forEach(function(it){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'svc-row';
+        b.innerHTML = '<div class="ic">' + esc(it.icon || '') + '</div>'
+          + '<div class="tx"><div class="ti">' + esc(it.title || '') + '</div>'
+          + (it.short ? '<div class="sb">' + esc(it.short) + '</div>' : '') + '</div>'
+          + '<div class="ar">›</div>';
+        b.addEventListener('click', function(){ openService(it); });
+        svcList.appendChild(b);
+      });
+      svcEl.hidden = false;
     }
   })();
 
