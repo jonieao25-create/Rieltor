@@ -298,6 +298,14 @@ document.body.insertAdjacentHTML('afterbegin', `
     var pointsEl = document.getElementById('points');
     var points = sec.points || [];
     h1.hidden = points.length > 0;
+    // settings.pointsFirst: плашки сразу под карточкой риелтора (выше услуг),
+    // а надпись раздела — ниже, прямо перед текстом и карточками ЖК
+    var head = document.querySelector('.home-head');
+    var moved = !!(SETTINGS.pointsFirst && points.length);
+    head.insertBefore(pointsEl, moved ? document.getElementById('services') : intro);
+    head.insertBefore(eyebrow, moved ? intro : h1);
+    eyebrow.classList.toggle('below', moved);
+    pointsEl.classList.toggle('first', moved);
     pointsEl.hidden = !points.length;
     pointsEl.innerHTML = '';
     // плашки-карточки {icon, title, text}: золотая фраза сверху (sec.slogan)

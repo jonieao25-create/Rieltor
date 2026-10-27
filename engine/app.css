@@ -93,6 +93,8 @@ body::before{
 /* ---- Home ---- */
 .home-head{padding:18px 0 6px}
 .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.home-head .eyebrow.below{margin-top:16px}
+.points.first{margin:0 0 4px}
 .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
 .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
 
