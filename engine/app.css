@@ -106,6 +106,32 @@ body::before{
   text-transform:uppercase; letter-spacing:.03em;
 }
 
+/* плашки-карточки {icon, title, text}: золотая фраза + лента квадратов вбок */
+.points.cards{display:flex; flex-direction:column; gap:10px}
+.slogan{
+  display:flex; gap:10px; align-items:center; border-radius:14px; padding:16px;
+  color:#1b1406; font-size:15px; line-height:1.35; font-weight:800;
+  background:linear-gradient(135deg,#F7E39A,#D4A73C 45%,#F3D57A 70%,#B8860B);
+  box-shadow:0 4px 14px rgba(184,134,11,.35);
+}
+.slogan i{font-style:normal; font-size:24px; flex:0 0 auto}
+.pt-row{
+  display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
+  /* отступы, чтобы тень не обрезалась краем ленты */
+  margin:-4px -16px -6px 0; padding:4px 16px 10px 0; scrollbar-width:none;
+}
+.pt-row::-webkit-scrollbar{display:none}
+.points.cards .point{
+  flex:0 0 42%; aspect-ratio:1/1; scroll-snap-align:start; display:flex; flex-direction:column;
+  padding:12px 11px; text-transform:none; letter-spacing:0; font-weight:600;
+}
+.point i{font-style:normal; font-size:28px; line-height:1; margin-bottom:8px}
+.point b{display:block; font-size:13px; line-height:1.25; font-weight:800; text-transform:uppercase; letter-spacing:.02em}
+.point span{display:block; margin-top:5px; font-size:12px; line-height:1.4; font-weight:600; color:#3a3530}
+.pt-dots{display:flex; gap:5px; justify-content:center}
+.pt-dots u{width:6px; height:6px; border-radius:3px; background:#8a7d70; transition:width .2s}
+.pt-dots u.on{width:16px; background:#D6B779}
+
 .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
 /* переключатель разделов: две вкладки в ряд (порядок — как в data.js),
