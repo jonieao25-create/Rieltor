@@ -349,12 +349,27 @@ document.body.insertAdjacentHTML('afterbegin', `
         var dots = document.createElement('div');
         dots.className = 'pt-dots';
         points.forEach(function(_, i){ var u = document.createElement('u'); if (!i) u.className = 'on'; dots.appendChild(u); });
-        pointsEl.appendChild(dots);
+        // стрелки по бокам от точек — чтобы листать мышкой (Telegram на компьютере, сайт)
+        var nav = document.createElement('div');
+        nav.className = 'pt-nav';
+        nav.innerHTML = '<button type="button" class="pt-arr" aria-label="Назад">‹</button>';
+        nav.appendChild(dots);
+        nav.insertAdjacentHTML('beforeend', '<button type="button" class="pt-arr" aria-label="Вперёд">›</button>');
+        var arrows = nav.querySelectorAll('.pt-arr');
+        [-1, 1].forEach(function(dir, i){
+          arrows[i].addEventListener('click', function(){
+            row.scrollBy({left: dir * (row.firstChild.offsetWidth + 10), behavior:'smooth'});
+          });
+        });
+        arrows[0].disabled = true;
+        pointsEl.appendChild(nav);
         row.addEventListener('scroll', function(){
           var w = row.firstChild.offsetWidth + 10;
           var max = row.scrollWidth - row.clientWidth;
           var k = row.scrollLeft >= max - 2 ? points.length - 1 : Math.round(row.scrollLeft / w);
           [].forEach.call(dots.children, function(u, i){ u.className = i === k ? 'on' : ''; });
+          arrows[0].disabled = row.scrollLeft < 2;
+          arrows[1].disabled = row.scrollLeft >= max - 2;
         }, {passive:true});
       }
     }
