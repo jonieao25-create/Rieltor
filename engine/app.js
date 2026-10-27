@@ -300,12 +300,56 @@ document.body.insertAdjacentHTML('afterbegin', `
     h1.hidden = points.length > 0;
     pointsEl.hidden = !points.length;
     pointsEl.innerHTML = '';
-    points.forEach(function(t){
+    // плашки-карточки {icon, title, text}: золотая фраза сверху (sec.slogan)
+    // и лента квадратов, листается вбок. Плашки-строки — как раньше, сеткой.
+    var cards = points.some(function(t){ return typeof t === 'object'; });
+    pointsEl.classList.toggle('cards', cards);
+    if (!cards) points.forEach(function(t){
       var d = document.createElement('div');
       d.className = 'point';
       d.textContent = t;
       pointsEl.appendChild(d);
     });
+    else {
+      if (sec.slogan){
+        // если фраза начинается со значка — выносим его отдельно слева
+        var sm = sec.slogan.match(/^(\S+)\s+(.*)$/);
+        var sl = document.createElement('div');
+        sl.className = 'slogan';
+        if (sm && !/[A-Za-zА-Яа-яЁё0-9]/.test(sm[1])){
+          sl.innerHTML = '<i></i><div></div>';
+          sl.querySelector('i').textContent = sm[1];
+          sl.querySelector('div').textContent = sm[2];
+        } else sl.textContent = sec.slogan;
+        pointsEl.appendChild(sl);
+      }
+      var row = document.createElement('div');
+      row.className = 'pt-row';
+      points.forEach(function(t){
+        if (typeof t === 'string') t = {title: t};
+        var d = document.createElement('div');
+        d.className = 'point';
+        d.innerHTML = (t.icon ? '<i></i>' : '') + '<b></b>' + (t.text ? '<span></span>' : '');
+        if (t.icon) d.querySelector('i').textContent = t.icon;
+        d.querySelector('b').textContent = t.title || '';
+        if (t.text) d.querySelector('span').textContent = t.text;
+        row.appendChild(d);
+      });
+      pointsEl.appendChild(row);
+      // точки под лентой: подсвечиваем ту плашку, что сейчас слева
+      if (points.length > 2){
+        var dots = document.createElement('div');
+        dots.className = 'pt-dots';
+        points.forEach(function(_, i){ var u = document.createElement('u'); if (!i) u.className = 'on'; dots.appendChild(u); });
+        pointsEl.appendChild(dots);
+        row.addEventListener('scroll', function(){
+          var w = row.firstChild.offsetWidth + 10;
+          var max = row.scrollWidth - row.clientWidth;
+          var k = row.scrollLeft >= max - 2 ? points.length - 1 : Math.round(row.scrollLeft / w);
+          [].forEach.call(dots.children, function(u, i){ u.className = i === k ? 'on' : ''; });
+        }, {passive:true});
+      }
+    }
     intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
 
     listEl.innerHTML = '';
