@@ -44,14 +44,19 @@
 
   /* КНОПКИ: «стеклянные», выезжают по очереди, приподнимаются при наведении */
   .btn{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px 18px;margin:0 0 12px;border-radius:18px;
-       background:rgba(33,28,25,.58);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+       background:rgba(33,28,25,.58);border:0;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
        color:var(--text);text-decoration:none;font-size:17px;font-weight:700;box-shadow:0 6px 22px rgba(0,0,0,.28);
        opacity:0;transform:translateY(18px);animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards;
        transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,background .25s ease;-webkit-tap-highlight-color:transparent}
   .btn small{display:block;font-weight:500;font-size:13px;color:var(--muted);margin-top:2px}
   .btn .ic{font-size:24px;width:44px;height:44px;display:grid;place-items:center;flex:none;border-radius:14px;background:rgba(255,255,255,.08);transition:transform .3s ease}
   .btn .go{margin-left:auto;font-size:20px;color:var(--accent-2);opacity:.75;transition:transform .25s ease,opacity .25s}
-  .btn:hover{transform:translateY(-3px);border-color:rgba(56,201,183,.7);background:rgba(33,28,25,.72);box-shadow:0 12px 30px rgba(0,0,0,.4),0 0 0 1px rgba(56,201,183,.25)}
+  .btn:hover{transform:translateY(-3px);background:rgba(33,28,25,.72);box-shadow:0 12px 30px rgba(0,0,0,.4),0 0 18px rgba(214,183,121,.35)}
+  /* ЗОЛОТАЯ РАМКА у каждой плашки: металлический градиент, по нему медленно бежит отблеск */
+  .btn::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:2px;pointer-events:none;
+       background:linear-gradient(120deg,#A8761C,#F3D57A,#B8860B,#F7E39A,#A8761C,#F3D57A,#B8860B);background-size:300% 300%;animation:goldmove 6s linear infinite;
+       -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  @keyframes goldmove{to{background-position:300% 0}}
   .btn:hover .ic{transform:scale(1.12) rotate(-6deg)}
   .btn:hover .go{transform:translateX(4px);opacity:1}
   .btn:active{transform:scale(.97);transition-duration:.08s}
