@@ -21,10 +21,10 @@ summary::-webkit-details-marker{display:none}
 @keyframes vitrina-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(-3deg)}}
 @media (prefers-reduced-motion: reduce){*{animation:none !important}}
 @media (min-width: 1100px){
-.scr{min-height:100vh; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center}
-.scr > div{width:100%}
-.scr-hero{min-height:calc(100vh - 40px); box-sizing:border-box; display:flex; flex-direction:column}
-.scr-hero > div{width:100%; flex:1; display:flex; flex-direction:column}
+.scr{min-height:100vh; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:4vh !important; padding-bottom:4vh !important}
+.scr > div{width:100%; box-sizing:border-box}
+.scr-hero{min-height:calc(100vh - 40px); box-sizing:border-box; display:flex; flex-direction:column; align-items:center}
+.scr-hero > div{width:100%; box-sizing:border-box; flex:1; display:flex; flex-direction:column}
 .scr-hero > div > div:nth-child(2){flex:1}
 }
 
@@ -47,7 +47,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- HERO -->
 <div class="scr-hero" style="position: relative; padding: 0 0 clamp(56px, 8vw, 110px) 0; background: radial-gradient(circle at 80% 0%, #17463F 0%, #0D1715 55%)">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px)">
 <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 20px 0">
 <div style="display: flex; align-items: center; gap: 10px">
 <div style="width: 36px; height: 36px; border-radius: 11px; background: #FF6A3D; color: #0D1715; display: flex; align-items: center; justify-content: center; font-family: 'Unbounded', Arial, sans-serif; font-weight: 800; font-size: 18px">В</div>
@@ -105,7 +105,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- BEFORE / AFTER -->
 <div class="scr" style="background: #F2EEE6; color: #0D1715; padding: clamp(72px, 10vw, 128px) 0 clamp(56px, 8vw, 104px) 0; margin-top: -12px">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(32px, 5.4vw, 90px); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em">Было <span style="color: #FF6A3D">→</span> стало</h2>
 <div style="display: flex; flex-wrap: wrap; gap: 20px">
 <div style="flex: 1 1 380px; min-width: 0; box-sizing: border-box; padding: clamp(24px, 3.5vw, 40px); background: #E4DED2; border-radius: 28px; display: flex; flex-direction: column; gap: 14px">
@@ -133,7 +133,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- HOW IT WORKS -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(32px, 5.4vw, 90px); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em; max-width: 900px">Три касания до&nbsp;заявки</h2>
 <div style="display: flex; flex-wrap: wrap; gap: 20px">
 <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; background: #142320; border: 1px solid #22372F; border-radius: 28px; overflow: hidden">
@@ -166,7 +166,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- BENTO -->
 <div class="scr" style="background: #F2EEE6; color: #0D1715; padding: clamp(64px, 9vw, 120px) 0">
-<div style="max-width: 1240px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
+<div style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(32px, 5.4vw, 90px); font-weight: 800; line-height: 1.02; letter-spacing: -0.02em">Что получает риелтор</h2>
 <div style="display: flex; flex-wrap: wrap; gap: 16px">
 <div style="flex: 2 1 460px; min-width: 0; position: relative; min-height: 340px; border-radius: 28px; overflow: hidden; display: flex; align-items: flex-end">
@@ -208,7 +208,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- STORIES: обзоры и сторис ведут в витрину -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #0E6E64">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
 <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 <p style="margin: 0; align-self: flex-start; background: #FF6A3D; color: #0D1715; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Идея для продаж</p>
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4vw, 65px); font-weight: 800; line-height: 1.06; letter-spacing: -0.02em">Снимаете обзоры?<span style="display: block; margin-top: 10px; color: #FFD9C9; font-size: 0.72em; line-height: 1.12">Пусть каждый обзор ведёт в&nbsp;витрину</span></h2>
@@ -250,7 +250,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- ZHK EXAMPLE + LEAD -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #0D1715; color: #F2EEE6">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
 <div style="display: flex; flex-direction: column; gap: 18px"><p style="margin: 0; align-self: flex-start; background: #142320; color: #FF6A3D; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Новостройки · ЖК «Вдохновение»</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Всё о&nbsp;ЖК на&nbsp;одной странице</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #B9CBC5; max-width: 600px">Клиент открывает ЖК и&nbsp;видит всё, что обычно приходится пересылать файлами. Вот что на&nbsp;странице, сверху вниз.</p></div>
 <div style="display: flex; flex-wrap: wrap; gap: clamp(16px, 2.4vw, 28px); justify-content: center"><div class="rv" style="flex: 1 1 150px; max-width: 215px; min-width: 140px; display: flex; flex-direction: column; gap: 14px">
 <div style="width: 100%; flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transform: rotate(0deg)"><img src="img/scr-zhk.jpg?v=2" alt="Фото и главное" style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 25px; display: block"></div>
@@ -272,7 +272,7 @@ summary::-webkit-details-marker{display:none}
 </div>
 <!-- COAST EXAMPLE -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #0E6E64; color: #F2EEE6">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
 <div style="display: flex; flex-direction: column; gap: 18px"><p style="margin: 0; align-self: flex-start; background: #F2EEE6; color: #0E6E64; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Побережье · ЖК «МО’ре»</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">ЖК у&nbsp;моря: цены, планировки и&nbsp;сколько до&nbsp;пляжа</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #D5E6E1; max-width: 760px">Для ЖК на&nbsp;побережье витрина сразу показывает, сколько метров до&nbsp;моря и&nbsp;минут до&nbsp;пляжа, а&nbsp;ещё условия покупки и&nbsp;особенности дома.</p></div>
 <div style="display: flex; flex-wrap: wrap; gap: clamp(16px, 2.4vw, 28px); justify-content: center"><div class="rv" style="flex: 1 1 150px; max-width: 215px; min-width: 140px; display: flex; flex-direction: column; gap: 14px">
 <div class="ph" style="width: 100%; flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35)"><img src="img/scr-c1.jpg?v=3" alt="Фото и главное" style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 25px; display: block"></div>
@@ -292,7 +292,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- VILLAGE EXAMPLE -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #F2EEE6; color: #0D1715">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
 <div style="display: flex; flex-direction: column; gap: 18px"><p style="margin: 0; align-self: flex-start; background: #0D1715; color: #F2EEE6; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Коттеджи · посёлок «Родники»</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Посёлок и&nbsp;каждый дом в&nbsp;нём</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #3C4A46; max-width: 760px">На странице посёлка фото, коммуникации, все проекты домов и&nbsp;условия покупки. У&nbsp;каждого дома своя страница с&nbsp;ценой, площадями и&nbsp;планировкой.</p></div>
 <div style="display: flex; flex-wrap: wrap; gap: clamp(16px, 2.4vw, 28px); justify-content: center"><div class="rv" style="flex: 1 1 150px; max-width: 215px; min-width: 140px; display: flex; flex-direction: column; gap: 14px">
 <div class="ph" style="width: 100%; flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35)"><img src="img/scr-v1.jpg?v=3" alt="Посёлок" style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 25px; display: block"></div>
@@ -315,7 +315,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- RESALE EXAMPLE -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #0D1715; color: #F2EEE6">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(32px, 4.5vw, 56px)">
 <div style="display: flex; flex-direction: column; gap: 18px"><p style="margin: 0; align-self: flex-start; background: #FF6A3D; color: #0D1715; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Раздел «Вторичка»</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Вторичное жильё рядом с&nbsp;новостройками</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #B9CBC5; max-width: 760px">В витрине есть вкладка «Вторичка». Каждый риелтор показывает там свои объекты: присылаете объявление и&nbsp;фото, и&nbsp;оно появляется в&nbsp;вашей витрине. На&nbsp;примере дом в&nbsp;пос.&nbsp;Красное.</p><ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 32px; max-width: 1100px"><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Только ваши объекты, не общая доска объявлений</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Все фото, цена, полное описание и&nbsp;карта</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Кнопка «Записаться на&nbsp;просмотр», заявка приходит вам</span></li></ul></div>
 <div style="display: flex; flex-wrap: wrap; gap: clamp(16px, 2.4vw, 28px); justify-content: center"><div class="rv" style="flex: 1 1 150px; max-width: 215px; min-width: 140px; display: flex; flex-direction: column; gap: 14px">
 <div class="ph" style="width: 100%; flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35)"><img src="img/scr-r1.jpg?v=3" alt="Фото и главное" style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 25px; display: block"></div>
@@ -335,28 +335,28 @@ summary::-webkit-details-marker{display:none}
 
 <!-- LEAD: как приходит заявка -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #0D1715; color: #F2EEE6">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column">
 <div style="display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 64px); align-items: center"><div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 20px"><p style="margin: 0; align-self: flex-start; background: #FF6A3D; color: #0D1715; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Так приходит заявка</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Готовая заявка у&nbsp;вас в&nbsp;Telegram</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #B9CBC5; max-width: 600px">Клиент нажал «Оставить заявку», и&nbsp;через секунду бот присылает вам сообщение: какой ЖК, имя, телефон и&nbsp;ник в&nbsp;Telegram. Можно сразу перезвонить или написать.</p><p style="margin: 0; font-size: 14px; color: #8FA7A0">Имя и телефон в примере вымышленные.</p></div><div style="flex: 1 1 420px; min-width: 0; display: flex; justify-content: center"><div style="width: 100%; max-width: 760px; box-sizing: border-box; background: #D9E4CF; border-radius: 28px; padding: clamp(14px, 2vw, 22px); display: flex; flex-direction: column; gap: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.3)"><div style="display: flex; align-items: center; gap: 12px; padding: 4px 6px 10px 6px; border-bottom: 1px solid rgba(0,0,0,0.08)"><p style="margin: 0; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #0E6E64; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px">Е</p><div><p style="margin: 0; font-weight: 800; font-size: 16px; color: #111">Ваш бот</p><p style="margin: 0; font-size: 13px; color: #5F6B66">бот</p></div></div><div style="align-self: flex-start; background: #FFFFFF; color: #111; border-radius: 18px 18px 18px 4px; padding: 16px 18px; font-size: clamp(19px, 2.2vw, 36px); line-height: 1.5; font-family: Arial, sans-serif; box-sizing: border-box; max-width: 100%">🏠 <b>Новая заявка</b><br>ЖК: <b>ЖК «Вдохновение»</b><br>Имя: Анна<br>Телефон: +7 924 123-45-67<br>Telegram: <span style="color: #168ACD">@anna_klg</span><span style="display: block; text-align: right; font-size: 13px; color: #9AA3A0; margin-top: 6px">19:42</span></div></div></div></div>
 </div>
 </div>
 
 <!-- STATS: /stats -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: radial-gradient(circle at 90% 10%, #17463F 0%, #0D1715 55%); color: #F2EEE6">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
 <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px"><p style="margin: 0; align-self: flex-start; background: #FF6A3D; color: #0D1715; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Статистика</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Видно, кто и&nbsp;что смотрел</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #B9CBC5; max-width: 600px">Напишите своему боту команду /stats, и&nbsp;он пришлёт статистику витрины: сколько раз её открывали за&nbsp;день, неделю и&nbsp;месяц, какие ЖК смотрят чаще всего и&nbsp;кто заходил последним.</p><ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; max-width: 600px"><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Понятно, какие ЖК интересны вашим клиентам</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Видно, кто заходил, даже если не&nbsp;оставил заявку: можно написать первым</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #F2EEE6"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6A3D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Ваши собственные заходы не считаются</span></li></ul><p style="margin: 0; font-size: 14px; color: #8FA7A0">Цифры и имена в примере справа условные.</p></div><div style="flex: 1 1 420px; min-width: 0; display: flex; justify-content: center"><div style="width: 100%; max-width: 760px; box-sizing: border-box; background: #D9E4CF; border-radius: 28px; padding: clamp(14px, 2vw, 22px); display: flex; flex-direction: column; gap: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.3)"><div style="display: flex; align-items: center; gap: 12px; padding: 4px 6px 10px 6px; border-bottom: 1px solid rgba(0,0,0,0.08)"><p style="margin: 0; flex: none; width: 44px; height: 44px; border-radius: 50%; background: #0E6E64; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px">Е</p><div><p style="margin: 0; font-weight: 800; font-size: 16px; color: #111">Ваш бот</p><p style="margin: 0; font-size: 13px; color: #5F6B66">бот</p></div></div><div style="align-self: flex-end; background: #E1FBC8; color: #111; border-radius: 18px 18px 4px 18px; padding: 10px 16px; font-size: clamp(15px, 1.25vw, 22px); font-family: Arial, sans-serif">/stats</div><div style="align-self: flex-start; background: #FFFFFF; color: #111; border-radius: 18px 18px 18px 4px; padding: 16px 18px; font-size: clamp(15px, 1.25vw, 22px); line-height: 1.5; font-family: Arial, sans-serif; box-sizing: border-box; max-width: 100%">📊 <b>Статистика приложения</b><br><br>Сегодня: 14 открытий · 9 человек<br>За 7 дней: 86 открытий · 41 человек<br>За 30 дней: 312 открытий · 127 человек<br><br>🏆 <b>Чаще смотрели (30 дней):</b><br>1. ЖК «Вдохновение» — 48<br>2. ЖК «Невский парк» — 37<br>3. ЖК «Морис» — 29<br><br>📂 Разделы: Новостройки 140 · Побережье 96 · Коттеджи 51 · Вторичка 25<br><br>👤 <b>Последние посетители:</b><br>• Анна (<span style="color: #168ACD">@anna_klg</span>), 20:58, ЖК «Вдохновение»<br>• Сергей, 20:31, Посёлок «Родники»</div></div></div>
 </div>
 </div>
 
 <!-- SERVICES: брокер и юрист -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #FF6A3D; color: #0D1715">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 72px); align-items: center">
 <div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px"><p style="margin: 0; align-self: flex-start; background: #0D1715; color: #F2EEE6; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Больше поводов написать вам</p><h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Ипотечный брокер и&nbsp;юрист прямо в&nbsp;витрине</h2><p style="margin: 0; font-size: clamp(17px, 1.3vw, 24px); line-height: 1.55; color: #2A1A12; max-width: 600px">В приложении, которое открывается из вашего бота, есть блок «Наши услуги»: ипотечный брокер и&nbsp;юридические услуги. Клиент читает, чем вы поможете, и&nbsp;оставляет заявку. Она приходит вам, как и&nbsp;заявки на&nbsp;ЖК.</p><ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; max-width: 600px"><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #0D1715"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1715" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Ипотека: заявка сразу в&nbsp;несколько банков</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #0D1715"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1715" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Юрист: проверка объекта, договора, сопровождение</span></li><li style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.45; color: #0D1715"><svg viewBox="0 0 24 24" fill="none" stroke="#0D1715" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; width: 22px; height: 22px; margin-top: 2px"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span>Ваши услуги и&nbsp;тексты, без цен, если не&nbsp;хотите их показывать</span></li></ul></div><div style="flex: 1 1 420px; min-width: 0; display: flex; justify-content: center; align-items: center; gap: clamp(12px, 2.5vw, 28px)"><div style="width: clamp(150px, 16vw, 310px); flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transform: rotate(-4deg)"><img src="img/scr-services.jpg?v=2" alt="Главная: блок «Наши услуги»" style="width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 25px; display: block"></div><div style="width: clamp(150px, 16vw, 310px); flex: none; aspect-ratio: 390 / 844; box-sizing: border-box; padding: 8px; background: #050908; border-radius: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.35); transform: rotate(4deg)"><img src="img/scr-svc-sheet.jpg?v=2" alt="Описание услуги ипотечного брокера" style="width: 100%; height: 100%; object-fit: cover; object-position: bottom; border-radius: 25px; display: block"></div></div>
 </div>
 </div>
 
 <!-- CASE -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: radial-gradient(circle at 10% 100%, #17463F 0%, #0D1715 55%)">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 64px); align-items: center">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 64px); align-items: center">
 <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
 <p style="margin: 0; align-self: flex-start; background: #FF6A3D; color: #0D1715; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Уже работает</p>
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(32px, 5vw, 80px); font-weight: 800; line-height: 1.04; letter-spacing: -0.02em">Один движок, у&nbsp;каждого своя витрина</h2>
@@ -381,7 +381,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- CUSTOM: всё настраивается под клиента -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: #F2EEE6; color: #0D1715">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(28px, 4vw, 48px)">
 <div style="display: flex; flex-direction: column; gap: 18px">
 <p style="margin: 0; align-self: flex-start; background: #0E6E64; color: #F2EEE6; padding: 12px 24px; border-radius: 999px; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; letter-spacing: -0.01em">Под любого клиента</p>
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Каждую страницу настроим как&nbsp;угодно</h2>
@@ -417,7 +417,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- OFFER -->
 <div class="scr" style="background: #FF6A3D; color: #0D1715; padding: clamp(64px, 9vw, 120px) 0">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 64px); align-items: center">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 64px); align-items: center">
 <div style="flex: 0 1 auto; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap">
 <p style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(140px, 24vw, 375px); font-weight: 800; line-height: 0.85; letter-spacing: -0.05em">3</p>
 <p style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(26px, 3.4vw, 55px); font-weight: 800; line-height: 1.05">шага до<br>своей витрины</p>
@@ -438,7 +438,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- FINAL CTA -->
 <div class="scr" style="padding: clamp(64px, 9vw, 120px) 0; background: radial-gradient(circle at 85% 20%, #17463F 0%, #0D1715 55%)">
-<div style="max-width: 1560px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: clamp(40px, 6vw, 80px)">
+<div style="max-width: 1560px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: clamp(40px, 6vw, 80px)">
 <div style="display: flex; flex-wrap: wrap; gap: clamp(32px, 5vw, 64px); align-items: center; justify-content: space-between">
 <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(30px, 4.6vw, 78px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Вы покупаете не&nbsp;страницу в&nbsp;интернете, а&nbsp;<span style="color: #FF6A3D">продавца, который работает 24/7</span></h2>
@@ -459,7 +459,7 @@ summary::-webkit-details-marker{display:none}
 
 <!-- FAQ -->
 <div class="scr" style="background: #F2EEE6; color: #0D1715; padding: clamp(64px, 9vw, 120px) 0">
-<div style="max-width: 880px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 32px">
+<div style="max-width: 880px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 96px); display: flex; flex-direction: column; gap: 32px">
 <h2 style="margin: 0; font-family: 'Unbounded', Arial, sans-serif; font-size: clamp(32px, 5vw, 75px); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em">Частые вопросы</h2>
 <div style="display: flex; flex-direction: column; gap: 10px">
 <details style="padding: 20px 22px; background: #FFFFFF; border-radius: 18px">
@@ -498,6 +498,20 @@ summary::-webkit-details-marker{display:none}
 <script>
 // появление блоков при прокрутке и счётчики на первом экране
 (function(){
+// каждая страница целиком влезает в экран: если блок выше окна, уменьшаем его
+  function fit(){
+    var big = window.innerWidth >= 1100;
+    [].slice.call(document.querySelectorAll('.scr > div, .scr-hero > div')).forEach(function(el){
+      el.style.zoom = '';
+      if (!big) return;
+      var sec = el.parentNode, cs = getComputedStyle(sec);
+      var room = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var h = el.getBoundingClientRect().height;
+      if (h > room) el.style.zoom = Math.max(0.55, room / h).toFixed(3);
+    });
+  }
+  fit(); window.addEventListener('resize', fit); window.addEventListener('load', fit);
+  setTimeout(fit, 800);
   [].slice.call(document.querySelectorAll('.scr > div > *')).forEach(function(e){ if(!e.querySelector('.rv') && !e.classList.contains('rv')) e.classList.add('rv'); });
   var items=[].slice.call(document.querySelectorAll('.rv'));
   if(!('IntersectionObserver' in window)){ items.forEach(function(e){e.classList.add('on')}); return; }
