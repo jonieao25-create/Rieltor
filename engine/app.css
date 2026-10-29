@@ -93,6 +93,8 @@ body::before{
 /* ---- Home ---- */
 .home-head{padding:18px 0 6px}
 .home-head .eyebrow{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700}
+.home-head .eyebrow.below{margin-top:16px}
+.points.first{margin:0 0 4px}
 .home-head h1{font-size:clamp(21px, 6.4vw, 26px); margin-top:6px; line-height:1.14; letter-spacing:-0.01em}
 .home-head p{color:var(--fg-muted); font-size:14px; margin-top:8px; line-height:1.5}
 
@@ -105,6 +107,40 @@ body::before{
   font-size:11.5px; line-height:1.35; font-weight:800;
   text-transform:uppercase; letter-spacing:.03em;
 }
+
+/* плашки-карточки {icon, title, text}: золотая фраза + лента квадратов вбок */
+.points.cards{display:flex; flex-direction:column; gap:10px}
+.slogan{
+  display:flex; gap:10px; align-items:center; border-radius:14px; padding:16px;
+  color:#1b1406; font-size:15px; line-height:1.35; font-weight:800;
+  background:linear-gradient(135deg,#F7E39A,#D4A73C 45%,#F3D57A 70%,#B8860B);
+  box-shadow:0 4px 14px rgba(184,134,11,.35);
+}
+.slogan i{font-style:normal; font-size:24px; flex:0 0 auto}
+.pt-row{
+  display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x mandatory;
+  /* отступы, чтобы тень не обрезалась краем ленты */
+  margin:-4px -16px -6px 0; padding:4px 16px 10px 0; scrollbar-width:none;
+}
+.pt-row::-webkit-scrollbar{display:none}
+.points.cards .point{
+  flex:0 0 42%; aspect-ratio:1/1; scroll-snap-align:start; display:flex; flex-direction:column;
+  padding:12px 11px; text-transform:none; letter-spacing:0; font-weight:600;
+}
+.point i{font-style:normal; font-size:28px; line-height:1; margin-bottom:8px}
+.point b{display:block; font-size:13px; line-height:1.25; font-weight:800; text-transform:uppercase; letter-spacing:.02em}
+.point span{display:block; margin-top:5px; font-size:12px; line-height:1.4; font-weight:600; color:#3a3530}
+.pt-dots{display:flex; gap:5px; justify-content:center}
+.pt-dots u{width:6px; height:6px; border-radius:3px; background:#8a7d70; transition:width .2s}
+.pt-dots u.on{width:16px; background:#D6B779}
+.pt-nav{display:flex; align-items:center; justify-content:center; gap:14px}
+.pt-arr{
+  width:34px; height:34px; border-radius:50%; display:grid; place-items:center; cursor:pointer;
+  border:2px solid transparent; color:#7a5a12; font:700 22px/1 sans-serif; padding:0 0 3px;
+  background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+  box-shadow:0 2px 8px rgba(184,134,11,.25);
+}
+.pt-arr:disabled{opacity:.35; cursor:default}
 
 .list{display:flex; flex-direction:column; gap:12px; padding:16px 0 28px}
 
@@ -441,8 +477,34 @@ footer.app-foot{padding:26px 0 30px; text-align:center; font-size:11.5px; color:
 /* карточка риелтора на главной (settings.agent в data.js) */
 .agent{display:flex; align-items:center; gap:12px; margin:14px 0 16px; padding:12px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px}
 .agent[hidden]{display:none}
-.agent img{flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover}
+.agent img, .agent .ini{flex:none; width:56px; height:56px; border-radius:50%; object-fit:cover}
+.agent .ini{display:flex; align-items:center; justify-content:center; background:var(--accent); color:var(--accent-ink); font-weight:800; font-size:22px}
 .agent .who{flex:1; min-width:0}
 .agent .nm{font-weight:800; font-size:15px}
 .agent .rl{color:var(--fg-muted); font-size:12.5px; margin-top:2px}
 .agent button{flex:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-size:13.5px; font-weight:700; cursor:pointer; background:var(--accent); color:var(--accent-ink)}
+
+/* блок «Наши услуги» под карточкой риелтора (settings.services в data.js) */
+.svc[hidden]{display:none}
+.svc-h{font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:#A8761C; font-weight:700; margin:0 0 8px}
+.svc-list{display:flex; flex-direction:column; gap:10px; margin-bottom:16px}
+/* белая плашка в золотой «металлической» рамке */
+.svc-row{display:flex; align-items:center; gap:12px; width:100%; text-align:left; color:#111; border:2px solid transparent; border-radius:14px; padding:12px; font:inherit; cursor:pointer;
+  background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+  box-shadow:0 3px 10px rgba(184,134,11,.22)}
+.svc-row .ic{flex:none; width:44px; height:44px; border-radius:12px; background:linear-gradient(135deg,#FFF6D9,#F1DC9A); display:flex; align-items:center; justify-content:center; font-size:22px}
+.svc-row .tx{flex:1; min-width:0}
+.svc-row .ti{font-weight:800; font-size:14px}
+.svc-row .sb{font-size:12px; color:#666; margin-top:2px; line-height:1.3}
+.svc-row .ar{flex:none; color:#B8860B; font-size:22px; font-weight:800}
+.svc-sheet{display:flex; flex-direction:column; gap:12px}
+.svc-sheet ul{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+.svc-sheet li{display:flex; gap:8px; font-size:13.5px; line-height:1.4}
+.svc-sheet li:before{content:'✓'; color:var(--accent); font-weight:800}
+.svc-sheet .price{background:var(--accent-soft); color:var(--accent); border-radius:10px; padding:8px 10px; font-size:13px; font-weight:700}
+/* плашки-преимущества в золотой рамке: включается в data.js — settings.goldPoints: true */
+.points.gold .point{
+  padding:12px 10px; border:2px solid transparent;
+  background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg,#F3D57A,#B8860B 45%,#F7E39A 70%,#A8761C) border-box;
+  box-shadow:0 3px 10px rgba(184,134,11,.22);
+}

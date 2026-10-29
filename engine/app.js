@@ -12,6 +12,7 @@ document.body.insertAdjacentHTML('afterbegin', `
     <div class="sec-tabs" id="secTabs"></div>
     <div class="home-head">
       <div class="agent" id="agent" hidden></div>
+      <div class="svc" id="services" hidden></div>
       <div class="eyebrow"></div>
       <h1></h1>
       <div class="points" id="points" hidden></div>
@@ -297,14 +298,81 @@ document.body.insertAdjacentHTML('afterbegin', `
     var pointsEl = document.getElementById('points');
     var points = sec.points || [];
     h1.hidden = points.length > 0;
+    // settings.pointsFirst: плашки сразу под карточкой риелтора (выше услуг),
+    // а надпись раздела — ниже, прямо перед текстом и карточками ЖК
+    var head = document.querySelector('.home-head');
+    var moved = !!(SETTINGS.pointsFirst && points.length);
+    head.insertBefore(pointsEl, moved ? document.getElementById('services') : intro);
+    head.insertBefore(eyebrow, moved ? intro : h1);
+    eyebrow.classList.toggle('below', moved);
+    pointsEl.classList.toggle('first', moved);
     pointsEl.hidden = !points.length;
     pointsEl.innerHTML = '';
-    points.forEach(function(t){
+    // плашки-карточки {icon, title, text}: золотая фраза сверху (sec.slogan)
+    // и лента квадратов, листается вбок. Плашки-строки — как раньше, сеткой.
+    var cards = points.some(function(t){ return typeof t === 'object'; });
+    pointsEl.classList.toggle('cards', cards);
+    if (!cards) points.forEach(function(t){
       var d = document.createElement('div');
       d.className = 'point';
       d.textContent = t;
       pointsEl.appendChild(d);
     });
+    else {
+      if (sec.slogan){
+        // если фраза начинается со значка — выносим его отдельно слева
+        var sm = sec.slogan.match(/^(\S+)\s+(.*)$/);
+        var sl = document.createElement('div');
+        sl.className = 'slogan';
+        if (sm && !/[A-Za-zА-Яа-яЁё0-9]/.test(sm[1])){
+          sl.innerHTML = '<i></i><div></div>';
+          sl.querySelector('i').textContent = sm[1];
+          sl.querySelector('div').textContent = sm[2];
+        } else sl.textContent = sec.slogan;
+        pointsEl.appendChild(sl);
+      }
+      var row = document.createElement('div');
+      row.className = 'pt-row';
+      points.forEach(function(t){
+        if (typeof t === 'string') t = {title: t};
+        var d = document.createElement('div');
+        d.className = 'point';
+        d.innerHTML = (t.icon ? '<i></i>' : '') + '<b></b>' + (t.text ? '<span></span>' : '');
+        if (t.icon) d.querySelector('i').textContent = t.icon;
+        d.querySelector('b').textContent = t.title || '';
+        if (t.text) d.querySelector('span').textContent = t.text;
+        row.appendChild(d);
+      });
+      pointsEl.appendChild(row);
+      // точки под лентой: подсвечиваем ту плашку, что сейчас слева
+      if (points.length > 2){
+        var dots = document.createElement('div');
+        dots.className = 'pt-dots';
+        points.forEach(function(_, i){ var u = document.createElement('u'); if (!i) u.className = 'on'; dots.appendChild(u); });
+        // стрелки по бокам от точек — чтобы листать мышкой (Telegram на компьютере, сайт)
+        var nav = document.createElement('div');
+        nav.className = 'pt-nav';
+        nav.innerHTML = '<button type="button" class="pt-arr" aria-label="Назад">‹</button>';
+        nav.appendChild(dots);
+        nav.insertAdjacentHTML('beforeend', '<button type="button" class="pt-arr" aria-label="Вперёд">›</button>');
+        var arrows = nav.querySelectorAll('.pt-arr');
+        [-1, 1].forEach(function(dir, i){
+          arrows[i].addEventListener('click', function(){
+            row.scrollBy({left: dir * (row.firstChild.offsetWidth + 10), behavior:'smooth'});
+          });
+        });
+        arrows[0].disabled = true;
+        pointsEl.appendChild(nav);
+        row.addEventListener('scroll', function(){
+          var w = row.firstChild.offsetWidth + 10;
+          var max = row.scrollWidth - row.clientWidth;
+          var k = row.scrollLeft >= max - 2 ? points.length - 1 : Math.round(row.scrollLeft / w);
+          [].forEach.call(dots.children, function(u, i){ u.className = i === k ? 'on' : ''; });
+          arrows[0].disabled = row.scrollLeft < 2;
+          arrows[1].disabled = row.scrollLeft >= max - 2;
+        }, {passive:true});
+      }
+    }
     intro.textContent = sec.intro || SETTINGS.intro || intro.textContent;
 
     listEl.innerHTML = '';
@@ -920,6 +988,24 @@ document.body.insertAdjacentHTML('afterbegin', `
     else window.open(url, '_blank');
   }
 
+  // окно услуги: описание, пункты, цена и кнопка заявки
+  function openService(it){
+    modalBody.innerHTML = '<div class="svc-sheet">'
+      + '<h3>' + esc((it.icon ? it.icon + ' ' : '') + (it.title || '')) + '</h3>'
+      + (it.text ? '<p>' + esc(it.text) + '</p>' : '')
+      + ((it.list && it.list.length) ? '<ul>' + it.list.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '')
+      + (it.price ? '<div class="price">' + esc(it.price) + '</div>' : '')
+      + '<div class="modal-actions">'
+        + '<button class="btn-ghost" id="svcClose" type="button">Закрыть</button>'
+        + '<button class="btn-primary" id="svcLead" type="button">' + esc(it.button || 'Оставить заявку') + '</button>'
+      + '</div></div>';
+    backdrop.hidden = false;
+    document.getElementById('svcClose').addEventListener('click', closeModal);
+    document.getElementById('svcLead').addEventListener('click', function(){
+      openLeadForm({ name: it.lead || ('услугу «' + (it.title || '') + '»'), room: '' });
+    });
+  }
+
   function openLeadForm(target){
     if (!target){
       var zhk = byId[ctaBar.dataset.zhk];
@@ -1049,10 +1135,12 @@ document.body.insertAdjacentHTML('afterbegin', `
     var cta = document.getElementById('ctaBtn');
     if (SETTINGS.ctaText && cta) cta.textContent = SETTINGS.ctaText;
 
-    // Карточка риелтора на главной: фото, имя, кнопка «Написать»
+    // Карточка риелтора на главной: фото, имя, кнопка «Написать».
+    // Нет фото — в кружке первая буква имени.
     var A = SETTINGS.agent, agentEl = document.getElementById('agent');
     if (A && agentEl){
-      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">' : '')
+      agentEl.innerHTML = (A.photo ? '<img src="' + esc(A.photo) + '" alt="">'
+          : '<div class="ini">' + esc((A.name || '?').charAt(0)) + '</div>')
         + '<div class="who"><div class="nm">' + esc(A.name || '') + '</div>'
         + (A.role ? '<div class="rl">' + esc(A.role) + '</div>' : '') + '</div>'
         + '<button type="button">' + esc(A.button || 'Написать') + '</button>';
@@ -1060,6 +1148,29 @@ document.body.insertAdjacentHTML('afterbegin', `
         openManagerChat('Здравствуйте! Хочу подобрать недвижимость.');
       });
       agentEl.hidden = false;
+    }
+    // Блок «Наши услуги» под карточкой риелтора. Нажатие — окно услуги,
+    // из него форма заявки с названием услуги.
+    // золотая рамка у плашек-преимуществ (settings.goldPoints в data.js)
+    if (SETTINGS.goldPoints) document.getElementById('points').classList.add('gold');
+
+    var S = SETTINGS.services, svcEl = document.getElementById('services');
+    if (S && S.items && S.items.length && svcEl){
+      svcEl.innerHTML = (S.title ? '<div class="svc-h">' + esc(S.title) + '</div>' : '')
+        + '<div class="svc-list"></div>';
+      var svcList = svcEl.querySelector('.svc-list');
+      S.items.forEach(function(it){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'svc-row';
+        b.innerHTML = '<div class="ic">' + esc(it.icon || '') + '</div>'
+          + '<div class="tx"><div class="ti">' + esc(it.title || '') + '</div>'
+          + (it.short ? '<div class="sb">' + esc(it.short) + '</div>' : '') + '</div>'
+          + '<div class="ar">›</div>';
+        b.addEventListener('click', function(){ openService(it); });
+        svcList.appendChild(b);
+      });
+      svcEl.hidden = false;
     }
   })();
 
