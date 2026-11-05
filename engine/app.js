@@ -225,6 +225,12 @@ document.body.insertAdjacentHTML('afterbegin', `
 
   var complexes = SITE_DATA.complexes;
   var SETTINGS  = SITE_DATA.settings;
+  var TRACKER = (window.RealtorAnalytics && window.RealtorAnalytics.create)
+    ? window.RealtorAnalytics.create({
+        endpoint: SETTINGS.leadEndpoint,
+        initData: TG ? TG.initData : '',
+      })
+    : { open:function(){}, section:function(){}, view:function(){} };
 
   var byId = {};
   complexes.forEach(function(c){ byId[c.id] = c; });
@@ -267,7 +273,10 @@ document.body.insertAdjacentHTML('afterbegin', `
       b.type = 'button';
       b.setAttribute('data-sec', s.id);
       b.textContent = s.tab || s.title;
-      b.addEventListener('click', function(){ renderHome(s.id); });
+      b.addEventListener('click', function(){
+        TRACKER.section({ id:s.id, name:s.tab || s.title || s.id });
+        renderHome(s.id);
+      });
       secTabsEl.appendChild(b);
     });
   } else {
@@ -495,6 +504,7 @@ document.body.insertAdjacentHTML('afterbegin', `
 
   function openDetail(id){
     var c = byId[id];
+    TRACKER.view({ id:c.id, name:c.name });
     if (c.type === 'village') return openVillage(c);
     document.getElementById('dTitle').textContent = c.name;
     document.getElementById('dSub').textContent = c.developer;
@@ -1212,5 +1222,11 @@ document.body.insertAdjacentHTML('afterbegin', `
       openDetail(start);
     }
   }
+
+  var initialSection = sectionById[currentSection];
+  TRACKER.open({
+    id: currentSection,
+    name: initialSection.tab || initialSection.title || currentSection
+  });
 
 })();

@@ -8,6 +8,19 @@ compatibility_date = "2026-10-01"
 ALLOWED_ORIGIN = "https://jonieao25-create.github.io"
 APP_URL = "https://jonieao25-create.github.io/Rieltor/clients/ID_КЛИЕНТА/"
 MANAGER = "НИК_РИЕЛТОРА"
+AGENT_NAME = "ИМЯ_РИЕЛТОРА"
+BOT_LINK = "https://t.me/ИМЯ_БОТА"
+
+# Необязательно: свой полный текст автоответа. Если переменной нет,
+# Worker собирает стандартный текст из AGENT_NAME.
+# SECRETARY_TEXT = "Здравствуйте! ..."
+
+# В Cloudflare Dashboard создайте отдельный KV namespace для клиента и
+# добавьте к Worker binding с именем REPLIES. Настоящий namespace id нельзя
+# хранить в этом общем шаблоне. При развёртывании через Wrangler добавьте:
+# [[kv_namespaces]]
+# binding = "REPLIES"
+# id = "ID_ОТДЕЛЬНОГО_KV_КЛИЕНТА"
 
 # Секреты (в файл их не записывать, вводятся только в Cloudflare):
 #   BOT_TOKEN       — токен бота клиента от @BotFather
