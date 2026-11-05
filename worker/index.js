@@ -160,6 +160,15 @@ export function secretaryDecision({ isNew, isNight, repliedRecently, fromOwner }
   return isNight ? 'night' : null;
 }
 
+function connectionAllowsReplies(connection, env) {
+  return Boolean(
+    connection &&
+    connection.is_enabled === true &&
+    connection.rights?.can_reply === true &&
+    String(connection.user?.id) === String(env.MANAGER_ID),
+  );
+}
+
 async function businessConnectionCanReply(connectionId, env, api) {
   const key = `conn:${connectionId}`;
   const cached = await env.REPLIES.get(key);
@@ -170,15 +179,17 @@ async function businessConnectionCanReply(connectionId, env, api) {
   });
   const data = await response.json().catch(() => ({}));
   const connection = data.result || {};
-  const allowed = Boolean(
-    response.ok &&
-    data.ok &&
-    connection.is_enabled !== false &&
-    connection.rights?.can_reply !== false &&
-    String(connection.user?.id) === String(env.MANAGER_ID),
-  );
+  const allowed = Boolean(response.ok && data.ok && connectionAllowsReplies(connection, env));
   await env.REPLIES.put(key, allowed ? '1' : '0', { expirationTtl: DAY_SEC });
   return allowed;
+}
+
+export async function handleBusinessConnectionUpdate(connection, env) {
+  if (!env.REPLIES || !connection?.id) return;
+  const allowed = connectionAllowsReplies(connection, env);
+  await env.REPLIES.put(`conn:${connection.id}`, allowed ? '1' : '0', {
+    expirationTtl: DAY_SEC,
+  });
 }
 
 export async function handleBusinessMessage(message, env, deps = {}) {
@@ -258,22 +269,17 @@ async function loadDay(env, date) {
 }
 
 function bump(map, id, name) {
-  if (!map[id] && Object.keys(map).length >= MAX_NAMES) return;
-  const item = map[id] || (map[id] = { n: name, k: 0 });
+  const hasItem = Object.prototype.hasOwnProperty.call(map, id);
+  if (!hasItem && Object.keys(map).length >= MAX_NAMES) return;
+  const item = hasItem ? map[id] : (map[id] = { n: name, k: 0 });
   item.n = name || item.n;
   item.k += 1;
 }
 
-export async function handleStat(data, user, env, nowMs = Date.now()) {
-  if (!env.REPLIES || !user || String(user.id) === String(env.MANAGER_ID)) return;
-  const event = data?.ev;
-  const rawId = clip(data?.id, 40);
-  const id = /^[A-Za-z0-9_-]+$/.test(rawId) ? rawId : '';
-  const name = clip(data?.name, 80);
-  if (!['open', 'section', 'view'].includes(event)) return;
-
-  const date = kldDate(nowMs);
-  const day = await loadDay(env, date);
+function applyStatEvent(day, data, user, nowMs) {
+  const event = data.ev;
+  const id = data.id;
+  const name = data.name;
   let what = '';
   if (event === 'open') day.o += 1;
   if (id && name && (event === 'open' || event === 'section')) {
@@ -284,13 +290,36 @@ export async function handleStat(data, user, env, nowMs = Date.now()) {
     bump(day.c, id, name);
     what = `смотрел(а) «${name}»`;
   }
-
   const person = day.p[user.id] || (day.p[user.id] = {});
   person.n = clip([user.first_name, user.last_name].filter(Boolean).join(' '), 60);
   person.u = clip(user.username, 40);
   person.t = nowMs;
   if (what) person.w = what;
-  await env.REPLIES.put(`stats:${date}`, JSON.stringify(day), { expirationTtl: STAT_TTL });
+}
+
+export async function handleStat(data, user, env, nowMs = Date.now(), deps = {}) {
+  if (!env.REPLIES || !user || String(user.id) === String(env.MANAGER_ID)) return;
+  const event = data?.ev;
+  const rawId = clip(data?.id, 40);
+  const unsafeIds = new Set(['__proto__', 'prototype', 'constructor']);
+  const id = /^[A-Za-z0-9_-]+$/.test(rawId) && !unsafeIds.has(rawId) ? rawId : '';
+  const name = clip(data?.name, 80);
+  if (!['open', 'section', 'view'].includes(event)) return;
+
+  const date = kldDate(nowMs);
+  const normalized = { ev: event, id, name };
+  const write = async () => {
+    const day = await loadDay(env, date);
+    applyStatEvent(day, normalized, user, nowMs);
+    await env.REPLIES.put(`stats:${date}`, JSON.stringify(day), { expirationTtl: STAT_TTL });
+  };
+  try {
+    await write();
+  } catch (error) {
+    const sleep = deps.sleep || ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
+    await sleep(1100);
+    await write();
+  }
 }
 
 function plural(number, one, few, many) {
@@ -379,7 +408,8 @@ export default {
       }
       try {
         const update = await request.json();
-        if (update.business_message) await handleBusinessMessage(update.business_message, env);
+        if (update.business_connection) await handleBusinessConnectionUpdate(update.business_connection, env);
+        else if (update.business_message) await handleBusinessMessage(update.business_message, env);
         else await handleBotUpdate(update, env);
       } catch (e) {
         // отвечаем 200 в любом случае, иначе Telegram будет слать то же сообщение снова

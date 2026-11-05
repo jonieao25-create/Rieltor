@@ -40,7 +40,7 @@ function telegramFake(options = {}) {
             user_chat_id: 500,
             date: 1,
             is_enabled: options.enabled ?? true,
-            rights: { can_reply: options.canReply ?? true },
+            ...(options.omitRights ? {} : { rights: { can_reply: options.canReply ?? true } }),
           },
         }),
       };
@@ -152,6 +152,7 @@ test('wrong, disabled, or reply-forbidden business connection writes no chat sta
     { ownerId: 501 },
     { enabled: false },
     { canReply: false },
+    { omitRights: true },
   ]) {
     const kv = new FakeKV();
     const telegram = telegramFake(options);
@@ -159,6 +160,27 @@ test('wrong, disabled, or reply-forbidden business connection writes no chat sta
     assert.equal(kv.puts.some((x) => x.key.startsWith('seen:') || x.key.startsWith('last:')), false);
     assert.equal(telegram.calls.filter((x) => x.method === 'sendMessage').length, 0);
   }
+});
+
+test('business connection update immediately replaces cached permission', async () => {
+  assert.equal(typeof worker.handleBusinessConnectionUpdate, 'function');
+  const kv = new FakeKV({ 'conn:business-1': '1' });
+  const env = envWith(kv);
+  await worker.handleBusinessConnectionUpdate({
+    id: 'business-1',
+    user: { id: 500 },
+    is_enabled: false,
+    rights: { can_reply: true },
+  }, env);
+  assert.equal(kv.values.get('conn:business-1'), '0');
+
+  await worker.handleBusinessConnectionUpdate({
+    id: 'business-1',
+    user: { id: 500 },
+    is_enabled: true,
+    rights: { can_reply: true },
+  }, env);
+  assert.equal(kv.values.get('conn:business-1'), '1');
 });
 
 test('failed Telegram business send does not mark the daily limiter or notify manager', async () => {
@@ -194,6 +216,56 @@ test('stats records allowed events with a 40-day TTL and ignores invalid input a
   assert.deepEqual(day.c, {});
   assert.equal(day.p['900'].u, 'ivan');
   assert.equal(day.p['500'], undefined);
+});
+
+test('stats rejects prototype-polluting ids', async () => {
+  const kv = new FakeKV();
+  await worker.handleStat(
+    { ev: 'view', id: '__proto__', name: 'Опасное имя' },
+    { id: 900, first_name: 'Иван' },
+    envWith(kv),
+    Date.UTC(2026, 10, 5, 10),
+  );
+  const day = JSON.parse(kv.values.get('stats:2026-11-05'));
+  assert.equal(Object.prototype.n, undefined);
+  assert.equal(Object.prototype.k, undefined);
+  assert.equal(Object.hasOwn(day.c, '__proto__'), false);
+});
+
+test('stats retries a rate-limited KV write after re-reading the day', async () => {
+  class OnceLimitedKV extends FakeKV {
+    constructor() {
+      super();
+      this.failed = false;
+    }
+    async put(key, value, options = {}) {
+      if (!this.failed && key.startsWith('stats:')) {
+        this.failed = true;
+        this.values.set(key, JSON.stringify({
+          o: 1,
+          s: { newbuilds: { n: 'Новостройки', k: 1 } },
+          c: {},
+          p: { 901: { n: 'Анна', u: 'anna', t: 1, w: 'раздел «Новостройки»' } },
+        }));
+        throw new Error('KV put rate limited');
+      }
+      return super.put(key, value, options);
+    }
+  }
+  const kv = new OnceLimitedKV();
+  const sleeps = [];
+  await worker.handleStat(
+    { ev: 'view', id: 'moris', name: 'ЖК Морис' },
+    { id: 900, first_name: 'Иван', username: 'ivan' },
+    envWith(kv),
+    Date.UTC(2026, 10, 5, 10),
+    { sleep: async (ms) => sleeps.push(ms) },
+  );
+  const day = JSON.parse(kv.values.get('stats:2026-11-05'));
+  assert.deepEqual(sleeps, [1100]);
+  assert.equal(day.o, 1);
+  assert.equal(day.c.moris.k, 1);
+  assert.equal(Object.keys(day.p).length, 2);
 });
 
 test('stats report reproduces Evgeniy totals, unique people, top five and recent visitors', async () => {
