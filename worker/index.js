@@ -130,6 +130,98 @@ async function handleBotUpdate(update, env) {
   });
 }
 
+// ---------- бот-секретарь Telegram Business ----------
+
+const DAY_SEC = 24 * 60 * 60;
+const NEW_AFTER_SEC = 20 * DAY_SEC;
+const TZ_OFFSET = 2;
+
+export function isNightAt(timestampMs, offsetHours = TZ_OFFSET) {
+  const hour = new Date(timestampMs + offsetHours * 60 * 60 * 1000).getUTCHours();
+  return hour >= 20 || hour < 7;
+}
+
+export function secretaryDecision({ isNew, isNight, repliedRecently, fromOwner }) {
+  if (fromOwner || repliedRecently) return null;
+  if (isNew) return 'new';
+  return isNight ? 'night' : null;
+}
+
+async function businessConnectionCanReply(connectionId, env, api) {
+  const key = `conn:${connectionId}`;
+  const cached = await env.REPLIES.get(key);
+  if (cached) return cached === '1';
+
+  const response = await api(env, 'getBusinessConnection', {
+    business_connection_id: connectionId,
+  });
+  const data = await response.json().catch(() => ({}));
+  const connection = data.result || {};
+  const allowed = Boolean(
+    response.ok &&
+    data.ok &&
+    connection.is_enabled !== false &&
+    connection.rights?.can_reply !== false &&
+    String(connection.user?.id) === String(env.MANAGER_ID),
+  );
+  await env.REPLIES.put(key, allowed ? '1' : '0', { expirationTtl: DAY_SEC });
+  return allowed;
+}
+
+export async function handleBusinessMessage(message, env, deps = {}) {
+  if (!env.REPLIES || !message?.chat || !message?.from || message.from.is_bot) return;
+  if (message.chat.type !== 'private' || !message.business_connection_id) return;
+
+  const api = deps.tgApi || tgApi;
+  const now = deps.now || Date.now;
+  if (!(await businessConnectionCanReply(message.business_connection_id, env, api))) return;
+
+  const seenKey = `seen:${message.chat.id}`;
+  const lastKey = `last:${message.chat.id}`;
+  const isNew = !(await env.REPLIES.get(seenKey));
+  await env.REPLIES.put(seenKey, '1', { expirationTtl: NEW_AFTER_SEC });
+
+  const fromOwner = String(message.from.id) === String(env.MANAGER_ID);
+  const repliedRecently = Boolean(await env.REPLIES.get(lastKey));
+  const reason = secretaryDecision({
+    isNew,
+    isNight: isNightAt(now(), TZ_OFFSET),
+    repliedRecently,
+    fromOwner,
+  });
+  if (!reason) return;
+
+  const agentName = clip(env.AGENT_NAME || 'Ваш риелтор', 80);
+  const text = env.SECRETARY_TEXT ||
+    `Здравствуйте! Я ${agentName}, риелтор по недвижимости Калининграда. ` +
+    'Сейчас не могу ответить, напишу вам в ближайшее время. ' +
+    'А пока можете посмотреть каталог недвижимости 👇';
+  const sent = await api(env, 'sendMessage', {
+    business_connection_id: message.business_connection_id,
+    chat_id: message.chat.id,
+    text,
+    reply_markup: {
+      inline_keyboard: [[{ text: '🏠 Открыть каталог', url: env.BOT_LINK }]],
+    },
+  });
+  if (!sent.ok) return;
+
+  await env.REPLIES.put(lastKey, '1', { expirationTtl: DAY_SEC });
+  const user = message.from;
+  const name = esc([user.first_name, user.last_name].filter(Boolean).join(' ') || 'клиент');
+  const who = user.username
+    ? `${name} (@${esc(user.username)})`
+    : `<a href="tg://user?id=${user.id}">${name}</a>`;
+  await api(env, 'sendMessage', {
+    chat_id: env.MANAGER_ID,
+    text: `🤖 Бот-секретарь ответил: ${who}\n` +
+      (reason === 'new'
+        ? 'Причина: новый клиент'
+        : 'Причина: нерабочее время (20:00–7:00)'),
+    parse_mode: 'HTML',
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);

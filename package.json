@@ -1,0 +1,8 @@
+{
+  "name": "rieltor-telegram-template",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
