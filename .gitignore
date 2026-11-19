@@ -1,0 +1,5 @@
+# Клиентские конфиги содержат ID клиента и KV — не публикуем в GitHub
+worker/wrangler.*.toml
+
+# Артефакты dry-run
+worker/dist/
